@@ -1,6 +1,6 @@
 # StudentsAvgCalculator
 
-## how to compile, test and run
+## how to compile, test and run object-oriented Flow
 
 using sbt do:
 
