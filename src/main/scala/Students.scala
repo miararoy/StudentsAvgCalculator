@@ -3,8 +3,13 @@ import java.io.FileNotFoundException
 object Students {
 
   def main(args: Array[String]): Unit = {
-    digestFileOO("/Users/roymiara/students/src/main/resources/test_file.csv")
-    pprintStudents()
+    if (args(0) == "OO") {
+      digestFileOO("/Users/roymiara/students/src/main/resources/test_file.csv")
+      pprintStudents()
+    }
+    else {
+      println("Not yet Supported")
+    }
   }
 
   def digestFileOO(filePath: String): Unit = {
