@@ -6,23 +6,23 @@ object StudentsDB {
   private var students: TrieMap[Int, Grades] = TrieMap.empty[Int, Grades]
   private var studentsPersonalData: Map[Int, StudentNameStatus] = Map.empty[Int, StudentNameStatus]
 
-  def update(row: (Int, String, String, Int)): Unit = {
+  def update(row: StudentRow): Unit = {
     try{
-      students.get(row._1) match {
+      students.get(row.id) match {
         case Some(gr) => {  // Student already in the db
-          if (gr.updateGrade(row._3, row._4)){} // Update Successful
+          if (gr.updateGrade(row.subject, row.grade)){} // Update Successful
           else {
-            studentsPersonalData.update(row._1, StudentNameStatus(row._2, false))
+            studentsPersonalData.update(row.id, StudentNameStatus(row.lastName, false))
           }
         }
         case None => { // Student not in db, create new entry
           students.update(
-            row._1,
-            new Grades(row._3, row._4)
+            row.id,
+            new Grades(row.subject, row.grade)
           )
           studentsPersonalData.update(
-            row._1,
-            StudentNameStatus(row._2)
+            row.id,
+            StudentNameStatus(row.lastName)
           )
         }
       }
@@ -31,7 +31,7 @@ object StudentsDB {
     }
   }
 
-  def update(rowIterator: Iterator[(Int, String, String, Int)]): Unit = {
+  def update(rowIterator: Iterator[StudentRow]): Unit = {
     rowIterator.foreach(r => update(r))
   }
 

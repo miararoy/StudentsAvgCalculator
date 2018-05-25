@@ -14,13 +14,12 @@ class InputFileHandler(filePath: String, sep: Char = '|') {
     }
   }
 
-  def getLinesIterator(): Iterator[(Int, String, String, Int)] = {
-    bufferedSource.getLines().map(l => strToRow(l))
+  def getLinesIterator(): Iterator[StudentRow] = {
+    bufferedSource.getLines().map(l => DataOperations.strToRow(separator)(l))
   }
 
-  def strToRow(str: String): (Int, String, String, Int) = {
-    val row: Array[String] = str.split(separator)
-    (row(0).toInt, row(1), row(2), row(3).toInt)
+  def strToRow(str: String): StudentRow = {
+    DataOperations.strToRow(separator)(str: String)
   }
 
   def closeBuffer(): Unit = {

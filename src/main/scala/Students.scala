@@ -5,14 +5,27 @@ object Students {
   val basePath = "/test_file.csv"
 
   def main(args: Array[String]): Unit = {
+    var path = getClass.getResource(basePath).getPath
+    if (args.size > 1) {path = args(1)}
+
     if (args(0) == "OO") {
-      digestFileOO(getClass.getResource(basePath).getPath)
+      digestFileOO(path)
       pprintStudents()
     }
-    else if (args(0) == "func") {
+    else if (args(0) == "fun_db") {
       StudentsDB.update(
         FunctionalInputFileHandler.readFileAndMapToIterator(
-          getClass.getResource(basePath).getPath
+          path
+        )
+      )
+      pprintStudents()
+    }
+    else if (args(0) == "fun_imm") {
+      pprintStudents(
+        DataOperations.studentIteratorToMapOfAvg(
+          FunctionalInputFileHandler.readFileAndMapToIterator(
+            path
+          )
         )
       )
     }
@@ -38,8 +51,15 @@ object Students {
     }
   }
 
-  def pprintStudents(): Unit = {
-    StudentsDB.getAllStudentsAvg().foreach{
+  def pprintStudents(map: Map[Int, Double] = null): Unit = {
+    var printOutMap: Map[Int, Double] = Map.empty[Int, Double]
+    if (map != null) {
+      printOutMap = map
+    }
+    else {
+      printOutMap = StudentsDB.getAllStudentsAvg().toMap
+    }
+    printOutMap.foreach{
       case (id, avg) =>{
         println(s"$id, $avg")
       }

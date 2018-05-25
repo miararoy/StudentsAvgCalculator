@@ -20,7 +20,7 @@ class TestInputFileHandler extends UnitTestBaseClass {
       assert(
         (new InputFileHandler("/Users/roymiara/students/src/main/resources/test_file.csv"))
           .strToRow("1|a|b|2")
-          .equals((1,"a","b",2))
+          .equals(StudentRow(1,"a","b",2))
       )
     }
   }

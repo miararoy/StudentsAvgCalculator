@@ -4,32 +4,26 @@ import scala.io.BufferedSource
 
 object FunctionalInputFileHandler {
 
-  def readFileAndMapToIterator(filePath: String, sep: Char = '|'): Iterator[(Int, String, String, Int)] = {
+  def readFileAndMapToIterator(filePath: String, sep: Char = '|'): Iterator[StudentRow] = {
     try {
       getLinesIterator(
         io.Source.fromFile(filePath),
-        sep,
-        strToRow(sep)
+        DataOperations.strToRow(sep)
       )
     } catch {
       case ex: Exception => {
-        throw new FileNotFoundException()
+        throw new FileNotFoundException(
+          s"${filePath.split("/").last} was not found at ${filePath.split("/").dropRight(1).mkString("/")}"
+        )
       }
     }
   }
 
-  def getLinesIterator(
+  private def getLinesIterator(
                         bufferedSource: BufferedSource,
-                        sep: Char,
-                        mappingFunction: (String) => (Int, String, String, Int)
-                      ): Iterator[(Int, String, String, Int)] =
+                        mappingFunction: (String) => StudentRow
+                      ): Iterator[StudentRow] =
   {
-    bufferedSource.getLines().map(l => strToRow(separator = sep)(l))
-  }
-
-  def strToRow(separator: Char)(str: String): (Int, String, String, Int) =
-  {
-    val row: Array[String] = str.split(separator)
-    (row(0).toInt, row(1), row(2), row(3).toInt)
+    bufferedSource.getLines().map(l => mappingFunction(l))
   }
 }
