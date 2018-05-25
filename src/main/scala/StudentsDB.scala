@@ -31,6 +31,10 @@ object StudentsDB {
     }
   }
 
+  def update(rowIterator: Iterator[(Int, String, String, Int)]): Unit = {
+    rowIterator.foreach(r => update(r))
+  }
+
   def getStudentAvg(studentId: Int): Double = {
     try {
       (students.readOnlySnapshot().get(studentId),

@@ -2,13 +2,22 @@ import java.io.FileNotFoundException
 
 object Students {
 
+  val basePath = "/test_file.csv"
+
   def main(args: Array[String]): Unit = {
     if (args(0) == "OO") {
-      digestFileOO("/Users/roymiara/students/src/main/resources/test_file.csv")
+      digestFileOO(getClass.getResource(basePath).getPath)
       pprintStudents()
     }
+    else if (args(0) == "func") {
+      StudentsDB.update(
+        FunctionalInputFileHandler.readFileAndMapToIterator(
+          getClass.getResource(basePath).getPath
+        )
+      )
+    }
     else {
-      println("Not yet Supported")
+      throw new IllegalArgumentException(s"${args(0)} is not yet Supported")
     }
   }
 
